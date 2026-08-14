@@ -1,0 +1,144 @@
+/* Interactive architecture stack diagram — used on the landing page.
+   Uses Material's own CSS variables so it adapts to light/dark automatically. */
+
+.stack-map {
+  margin: 1.5rem 0 2rem;
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
+.stack-map .tier {
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  padding: .55rem;
+  margin-bottom: .35rem;
+  background: var(--md-code-bg-color);
+}
+
+.stack-map .tier-label {
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: .62rem;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: .45rem;
+  display: block;
+}
+
+.stack-map .tier-label span {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: .8;
+}
+
+/* Individual clickable layer block */
+.stack-map a.blk {
+  display: block;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: 3px;
+  padding: .4rem .55rem;
+  margin-bottom: .3rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  transition: border-color .15s, transform .15s, background .15s;
+}
+
+.stack-map a.blk:hover,
+.stack-map a.blk:focus-visible {
+  border-left-color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  transform: translateX(2px);
+  outline: none;
+}
+
+.stack-map a.blk .id {
+  font-family: var(--md-code-font-family, monospace);
+  font-weight: 700;
+  color: var(--md-primary-fg-color);
+  margin-right: .5rem;
+}
+
+.stack-map a.blk:hover .id { color: var(--md-accent-fg-color); }
+
+.stack-map a.blk .note {
+  display: block;
+  opacity: .75;
+  font-size: .65rem;
+  margin-top: .1rem;
+}
+
+/* The chokepoint — visually enclosing, since that's the architectural claim */
+.stack-map .chokepoint {
+  border: 2px dashed var(--md-accent-fg-color);
+  border-radius: 4px;
+  padding: .5rem;
+  margin: .35rem 0;
+  background: color-mix(in srgb, var(--md-accent-fg-color) 6%, transparent);
+}
+
+.stack-map .chokepoint-hd {
+  font-weight: 700;
+  font-size: .64rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--md-accent-fg-color);
+  margin-bottom: .3rem;
+  display: block;
+}
+
+.stack-map .chokepoint-seq {
+  font-family: var(--md-code-font-family, monospace);
+  font-size: .6rem;
+  opacity: .8;
+  margin-bottom: .45rem;
+  word-spacing: .1rem;
+}
+
+.stack-map .flow {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  font-size: .8rem;
+  margin: .1rem 0;
+}
+
+/* Cross-cutting concerns rail */
+.stack-map .rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: .5rem;
+}
+
+.stack-map .rail a {
+  flex: 1 1 auto;
+  text-align: center;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 3px;
+  padding: .35rem .5rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  font-size: .66rem;
+  transition: border-color .15s, background .15s;
+}
+
+.stack-map .rail a:hover,
+.stack-map .rail a:focus-visible {
+  border-color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  outline: none;
+}
+
+.stack-map .hint {
+  font-size: .65rem;
+  opacity: .7;
+  margin-top: .5rem;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .stack-map .rail a { flex: 1 1 100%; }
+}

@@ -37,8 +37,12 @@ copyright: >
   content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>,
   code MIT
 
+extra_css:
+  - stylesheets/stack-map.css
+
 markdown_extensions:
   - admonition
+  - md_in_html
   - pymdownx.details
   - pymdownx.superfences
   - tables

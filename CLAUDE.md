@@ -25,7 +25,8 @@ requirements.txt              — PINNED mkdocs-material version (see warning be
 bootstrap.sh                  — one-time macOS setup script (already run)
 .github/workflows/deploy.yml  — auto-publishes on every push to main
 docs/                         — THE BOOK. Only this directory is built into the site.
-  index.md                    — landing page
+  index.md                    — landing page (contains the interactive stack diagram)
+  stylesheets/stack-map.css   — styles for that diagram; registered via extra_css in mkdocs.yml
   01-mcp.md … 15-build-order.md
   references.md               — attribution + further reading
   tool/index.md               — page embedding the interactive analyzer
@@ -77,6 +78,14 @@ git add . && git commit -m "..." && git push   # auto-deploys via GitHub Action
 ```
 
 Adding a chapter: create `docs/NN-topic.md`, add it to `nav:` in `mkdocs.yml`, push.
+
+### The interactive stack diagram
+
+The landing page opens with a clickable block diagram of the L0–L7 stack (process tier → run tier with the chokepoint → run record, plus a cross-cutting rail). It's raw HTML in `docs/index.md` styled by `docs/stylesheets/stack-map.css`.
+
+- It uses **Material's own CSS variables** (`--md-primary-fg-color`, `--md-accent-fg-color`, etc.) so light/dark mode works automatically. Don't hardcode colours.
+- Links inside it are **raw HTML hrefs**, so MkDocs does *not* validate or rewrite them. They use output paths (`02-orchestration/`, not `02-orchestration.md`). **If you rename or move a chapter, these break silently** — strict mode will not catch it. Check them manually after any nav change.
+- Two are anchor links (`#reference-architecture-vendor-agnostic-layering`, `#the-run-record`); renaming those headings breaks the jump.
 
 ### Known gotchas
 
