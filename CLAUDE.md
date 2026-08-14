@@ -11,6 +11,10 @@ Context for Claude Code sessions in this repo. Read this first.
 - Prose over bullet-fragments in the chapters themselves — the book reads as written argument, not slide notes.
 - Be direct about problems. If something in the repo is wrong, weak, or unsupported, say so plainly rather than working around it.
 
+## Read this too
+
+`DECISIONS.md` records *why* the architecture is shaped the way it is — including alternatives that were considered and rejected. **Before changing anything structural** (the reference architecture, the licence split, where the boilerplate lives, the nav scheme), check whether there's already a decision recorded there. If you make a new structural decision, add an entry.
+
 ## What this repo is
 
 **The AI Architecture Field Guide** — a public, living reference for architecting, governing, and costing agentic AI systems. Published free via GitHub Pages at `https://joarder.github.io/ai-architecture-field-guide/`.
@@ -20,6 +24,9 @@ Purpose: a practitioner reference I actually use to reason about workloads, *and
 ## Repo layout
 
 ```
+CLAUDE.md                     — this file
+DECISIONS.md                  — why the architecture is shaped this way (read before structural changes)
+LICENSE / LICENSE-CODE        — CC BY 4.0 for docs/, MIT for code
 mkdocs.yml                    — site config + navigation (edit nav here when adding a chapter)
 requirements.txt              — PINNED mkdocs-material version (see warning below)
 bootstrap.sh                  — one-time macOS setup script (already run)
@@ -68,6 +75,16 @@ cd boilerplate && python3 main.py
 | `src/cost_per_outcome.py` | 11 | Cost tagged to verified outcome |
 
 **Critical constraint:** several chapters quote this code directly. If you change the boilerplate, check whether a chapter quotes the changed lines and update both in the same commit. That co-location is the main reason the code lives in this repo rather than a separate one.
+
+## Current state
+
+Chapters 1–15 plus `references.md` are written and published. The reference implementation runs. Strict mode passes with zero warnings.
+
+The things most likely to need attention next, in rough priority:
+
+1. **The analyzer's rule logic has not been validated against a real workload.** It's a first-pass hypothesis engine and the page says so — but if it's ever used to *argue* a position rather than illustrate one, that gap matters.
+2. **Chapter code excerpts and `boilerplate/` must stay in sync.** Nothing enforces this automatically.
+3. **Raw-HTML links in the landing-page diagram are unvalidated** — see gotchas below.
 
 ## Workflow
 
