@@ -73,6 +73,27 @@ Running the full demo produces a real report:
 
 Every other chapter's module feeds this number: MCP/A2A determine which calls happen, RAG/memory determine context cost, the model router determines per-call cost, evals determine `verified`, and governance determines what's even allowed to run. Change any one of them and this report changes — which is the whole point of treating it as *the* instrument rather than one metric among many.
 
+## The deployment break-even
+
+Before optimising cost per verified outcome, there's a prior question: should this be an agent at all? A useful formulation:
+
+> Deploy when **P(success) > T(verify) / T(do)**
+
+Where `T(verify)` is the time for a human to check the output and `T(do)` is the time to do the task themselves. The intuition: if verifying is nearly as slow as doing, the agent needs to be almost always right to be worth it. If verification is cheap relative to the task, a much lower success rate still pays.
+
+For irreversible actions, extend it with an **agency tax** — weight the rework cost by failure probability, since a wrong irreversible action costs more than the task was worth.
+
+Two implications worth stating plainly:
+
+- **Cheap verification is a design goal, not a given.** Structured output contracts and deterministic checks don't just reduce eval cost — they move `T(verify)` down and change which tasks clear the bar at all.
+- **This is a Wave-1 measurement.** Break-even measures productivity value by construction — and productivity value is the least durable of the three value waves, because it gets competed away. It's a necessary gate, not a strategic justification.
+
+## Cost per *solved* task, not per task
+
+The divergence is larger than most estimates assume. Normalising published coding-benchmark costs to *solved* tasks rather than *attempted* ones spreads the results by roughly an order of magnitude — and **the cheapest model per task is frequently not the cheapest per solved task**, because the failed runs you retry never appear in the first number.
+
+This is the same claim as the verified-outcome principle, arriving from the model-selection direction: a cheaper model that fails more often can cost more in aggregate than an expensive one that doesn't. Without an eval gate you cannot see this at all — the retries just look like volume.
+
 ## Why this is the right instrument for a demand-sustainability question
 
 The trillion-dollar AI buildout's central risk isn't supply — it's whether the public and industry consume enough, *durably* enough, to absorb it. Cost-per-verified-outcome is the metric that distinguishes durable consumption from noise, because it's the only one of the candidates that fails visibly when volume isn't backed by verification.

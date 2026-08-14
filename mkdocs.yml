@@ -32,6 +32,11 @@ theme:
     - content.code.copy
     - search.suggest
 
+copyright: >
+  Copyright &copy; 2026 Joarder Kamal —
+  content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>,
+  code MIT
+
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -52,10 +57,16 @@ nav:
     - Evals & Observability: 04-evals-observability.md
     - Prompt vs RAG vs Fine-tune vs Distill: 05-model-economics.md
     - Inference Economics: 06-inference-economics.md
+  - "Reliability & Security":
+    - Agent Reliability & Failure Modes: 12-agent-reliability.md
+    - Agent Security: 13-agent-security.md
   - "Layer 4 — Governance":
+    - Runtime Control Patterns: 14-runtime-controls.md
     - Australian AI Governance & Security: 08-au-governance.md
     - Production Technology & Blockers: 09-production-tech.md
     - Enterprise & Principal-Architect Governance: 10-enterprise-governance.md
-  - "The Instrument":
+  - "Putting It Together":
+    - Build Order — What to Do First: 15-build-order.md
     - Cost-per-Verified-Outcome: 11-cost-per-outcome-instrument.md
-    - Workload Analyzer (interactive tool): tool.md
+    - Workload Analyzer (interactive tool): tool/index.md
+  - References: references.md

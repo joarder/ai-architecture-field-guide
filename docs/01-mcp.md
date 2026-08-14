@@ -33,7 +33,7 @@ REST and GraphQL standardize *client-to-service* communication. MCP standardizes
 
 ## Reference implementation
 
-From the [`support-copilot-boilerplate`](https://github.com/YOUR-GITHUB-USERNAME/support-copilot-boilerplate) companion repo — `src/mcp_tools.py`. A `ToolServer` owns capabilities and exposes them by schema; a `ToolClient` discovers what's available and invokes by name, never hardcoding which backend it's calling:
+From the [`boilerplate/`](https://github.com/joarder/ai-architecture-field-guide/tree/main/boilerplate) directory in this repo — `src/mcp_tools.py`. A `ToolServer` owns capabilities and exposes them by schema; a `ToolClient` discovers what's available and invokes by name, never hardcoding which backend it's calling:
 
 ```python
 class ToolServer:

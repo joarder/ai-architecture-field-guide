@@ -59,6 +59,30 @@ class SemanticMemory:
 
 **Swap-in point**: replace `search()`'s keyword scoring with a real embedding model + vector index (sentence-transformers + FAISS/pgvector) — the call signature agents use doesn't change.
 
+## The memory landscape, and the cost trade-off inside it
+
+The architectural choice here is usually framed as a feature comparison. It's really a cost decision:
+
+| Approach | How it works | Trade-off |
+|---|---|---|
+| **Self-editing** (Letta / MemGPT lineage) | Virtual-memory hierarchy; the *agent* pages information in and out via memory tools | Adaptive and inspectable — but **every memory operation costs inference tokens**, because the agent reasons about what to store |
+| **Passive extraction** (Mem0 lineage) | Facts extracted automatically into scoped stores over hybrid vector + graph + KV | Consistent and token-efficient; can't make nuanced in-context judgements |
+| **Temporal graph** (Zep / Graphiti) | Knowledge graph maintaining validity periods for facts | Solves supersession directly, at the cost of a heavier substrate |
+| **Provider-managed** | Built-in memory features | Zero build, zero control |
+| **Custom schema** | Your own tables | Full control, full maintenance |
+
+**Three observations that connect memory to cost and reliability:**
+
+1. **Self-editing memory has a token tax.** Spending inference on every turn to decide what to remember is a real, recurring cost — an architectural trade-off, not a feature preference.
+2. **Memory is a retrieval-quality problem that degrades over time, not a storage problem.** A store that can't represent supersession gets *worse* as it grows, so memory quality and token efficiency decay together.
+3. **Compaction is where cost and reliability failures meet.** MAST (see [Agent Reliability](12-agent-reliability.md)) names loss-of-conversation-history and step-repetition as distinct failure modes; both are compaction failures. Bad compaction costs money *and* causes the incident.
+
+## Programmatic tool calling
+
+The highest-leverage context lever most teams haven't pulled: rather than the model calling tools one at a time with every intermediate result landing in the context window, the model **writes code that orchestrates the tools**, and only the final result returns to the window.
+
+For any workflow with several chained calls and large intermediate payloads — filtering a large result set, joining two API responses, iterating over a list — this removes the intermediates from context entirely. It's the difference between the model *reading* every row and the model *writing a query*.
+
 ## Why this matters economically
 
 Poor context engineering hurts both sides of the value equation at once: it raises cost (more tokens) *and* lowers output quality (context rot) simultaneously. See [Cost-per-Verified-Outcome](11-cost-per-outcome-instrument.md).

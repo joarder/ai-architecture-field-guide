@@ -1,0 +1,41 @@
+# Licence
+
+This repository is dual-licensed, because it contains two different kinds of work.
+
+## Written content — CC BY 4.0
+
+Everything in `docs/` (the book: prose, diagrams, tables) is licensed under the
+**Creative Commons Attribution 4.0 International License (CC BY 4.0)**.
+
+You are free to share and adapt the material for any purpose, including
+commercially, provided you give appropriate credit, link to the licence, and
+indicate if changes were made.
+
+Full text: https://creativecommons.org/licenses/by/4.0/
+
+Suggested attribution:
+
+> "The AI Architecture Field Guide" by Joarder Kamal, licensed under CC BY 4.0.
+> https://github.com/joarder/ai-architecture-field-guide
+
+## Code — MIT
+
+Everything in `boilerplate/`, plus `docs/tool/analyzer.html` and the build
+tooling (`mkdocs.yml`, `bootstrap.sh`, workflows), is licensed under the
+**MIT License**. See [LICENSE-CODE](LICENSE-CODE).
+
+## Third-party material
+
+This guide synthesises published work by others. Where a framing, taxonomy, or
+architecture is distinctly one author's, it is attributed in the relevant
+chapter and listed in [docs/references.md](docs/references.md). Those
+attributions are not covered by the licences above — the underlying works
+remain the property of their respective authors, and the credit requirement
+stands independently of how you use this guide.
+
+If you believe something here is insufficiently attributed, please open an
+issue; corrections are welcome and will be made promptly.
+
+---
+
+Copyright (c) 2026 Joarder Kamal
