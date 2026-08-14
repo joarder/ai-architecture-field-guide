@@ -1,7 +1,7 @@
 site_name: The AI Architecture Field Guide
 site_description: A practitioner's reference for architecting, governing, and costing agentic AI systems — from protocol to production.
 site_author: Joarder Kamal, PhD
-repo_url: https://github.com/YOUR-GITHUB-USERNAME/ai-architecture-field-guide
+repo_url: https://github.com/joarder/ai-architecture-field-guide
 repo_name: ai-architecture-field-guide
 edit_uri: edit/main/docs/
 
