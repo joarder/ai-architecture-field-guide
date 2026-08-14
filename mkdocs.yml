@@ -1,0 +1,61 @@
+site_name: The AI Architecture Field Guide
+site_description: A practitioner's reference for architecting, governing, and costing agentic AI systems — from protocol to production.
+site_author: Joarder Kamal, PhD
+repo_url: https://github.com/YOUR-GITHUB-USERNAME/ai-architecture-field-guide
+repo_name: ai-architecture-field-guide
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - "Layer 1 — Connectivity":
+    - MCP: 01-mcp.md
+    - Beyond MCP (A2A & the protocol landscape): 07-protocols.md
+  - "Layer 2 — Cognition":
+    - Agent Orchestration: 02-orchestration.md
+    - Context, Memory & RAG: 03-context-memory-rag.md
+  - "Layer 3 — Quality & Economics":
+    - Evals & Observability: 04-evals-observability.md
+    - Prompt vs RAG vs Fine-tune vs Distill: 05-model-economics.md
+    - Inference Economics: 06-inference-economics.md
+  - "Layer 4 — Governance":
+    - Australian AI Governance & Security: 08-au-governance.md
+    - Production Technology & Blockers: 09-production-tech.md
+    - Enterprise & Principal-Architect Governance: 10-enterprise-governance.md
+  - "The Instrument":
+    - Cost-per-Verified-Outcome: 11-cost-per-outcome-instrument.md
+    - Workload Analyzer (interactive tool): tool.md
