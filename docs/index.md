@@ -81,91 +81,94 @@ Each chapter develops this scenario a little further. By the end it is a complet
 
 ## The map
 
+Here is the whole system, in the order a support ticket travels through it. You don't need to understand it yet — it's here so you have somewhere to come back to. Each chapter fills in one piece.
+
 <div class="stack-map" markdown="0">
 
   <div class="tier">
-    <span class="tier-label">Process tier <span>— lives for days, weeks, months</span></span>
-    <a class="blk" href="02-orchestration/#reference-architecture-vendor-agnostic-layering">
-      <span class="id">PROC</span>Declarative graph · append-only event log · reconciler
-      <span class="note">Holds rows, not running processes — so coverage is computed, not remembered</span>
+    <span class="tier-label">The long game &mdash; a ticket stays open for days or weeks</span>
+    <span class="tier-sub">Tracks the customer's whole issue from arrival to resolution.</span>
+    <a class="blk" href="02-orchestration/#the-architecture-and-two-arguments-inside-it">
+      <span class="ttl">What still needs doing</span><span class="tech">process tier</span>
+      <span class="note">A list of steps and a log of what's happened. Because it's stored rather than held in memory, you can <em>ask</em> what's outstanding instead of hoping someone tracked it.</span>
     </a>
   </div>
 
-  <div class="flow">&#9662;&nbsp; dispatches one step</div>
+  <div class="flow">&#9660;&nbsp; sends one step to be worked on</div>
 
   <div class="tier">
-    <span class="tier-label">Run tier <span>— lives for seconds</span></span>
+    <span class="tier-label">A single attempt &mdash; a few seconds</span>
+    <span class="tier-sub">One step of the ticket, start to finish.</span>
 
     <a class="blk" href="02-orchestration/">
-      <span class="id">L0</span>Interaction
-      <span class="note">Chat UI · IDE · voice · API caller</span>
+      <span class="ttl">Where the request arrives</span><span class="tech">L0 &middot; interaction</span>
+      <span class="note">An email, a chat message, a form. However the ticket reaches you.</span>
     </a>
     <a class="blk" href="03-context-memory-rag/">
-      <span class="id">L1</span>Host / Runtime
-      <span class="note">Session, context window, conversation state</span>
+      <span class="ttl">Keeping track of the conversation</span><span class="tech">L1 &middot; host / runtime</span>
+      <span class="note">Holds what's been said so far &mdash; and decides how much of it still fits in the model's limited attention.</span>
     </a>
 
     <div class="chokepoint">
-      <a class="chokepoint-hd" href="14-runtime-controls/" style="text-decoration:none">&#9670; The chokepoint — one path, no bypass</a>
-      <div class="chokepoint-seq">resolve &rarr; authorize &rarr; precondition &rarr; budget &rarr; assemble &rarr; render &rarr; generate &rarr; validate &rarr; persist &rarr; gate &rarr; emit</div>
+      <a class="chokepoint-hd" href="14-runtime-controls/">&#9670; One way in &mdash; no shortcuts</a>
+      <div class="chokepoint-seq">Who's asking? &rarr; Are they allowed? &rarr; What's the budget? &rarr; What should the model see? &rarr; Was the answer valid? &rarr; Write it all down.</div>
 
       <a class="blk" href="02-orchestration/">
-        <span class="id">L2</span>Reasoning
-        <span class="note">Planning, decomposition</span>
+        <span class="ttl">Working out what to do</span><span class="tech">L2 &middot; reasoning</span>
+        <span class="note">Is this a policy question or an account question? What's the next step?</span>
       </a>
       <a class="blk" href="05-model-economics/">
-        <span class="id">L3</span>Model
-        <span class="note">Interchangeable — prompt in, completion out</span>
+        <span class="ttl">The part that actually thinks</span><span class="tech">L3 &middot; the model</span>
+        <span class="note">Text goes in, text comes out. Swappable &mdash; nothing above or below needs to know which model this is.</span>
       </a>
       <a class="blk" href="12-agent-reliability/">
-        <span class="id">L4</span>Orchestration <em>(optional)</em>
-        <span class="note">Multi-agent coordination — add only for read-heavy work</span>
+        <span class="ttl">Splitting work between specialists <em>(only if needed)</em></span><span class="tech">L4 &middot; orchestration</span>
+        <span class="note">A billing specialist, a shipping specialist. Most systems don't need this &mdash; and adding it too early causes more problems than it solves.</span>
       </a>
       <a class="blk" href="01-mcp/">
-        <span class="id">L5</span>Tool Protocol — MCP
-        <span class="note">Discover and invoke capabilities</span>
+        <span class="ttl">Asking to use one of your systems</span><span class="tech">L5 &middot; tool protocol (MCP)</span>
+        <span class="note">A standard way for the model to find out what it can do, and to request it by name.</span>
       </a>
     </div>
 
     <a class="blk" href="01-mcp/">
-      <span class="id">L6</span>Capability Servers
-      <span class="note">Auth, schema validation, rate limits</span>
+      <span class="ttl">Your systems, safely wrapped</span><span class="tech">L6 &middot; capability servers</span>
+      <span class="note">One wrapper per system. This is where credentials live and where "is this allowed?" gets enforced.</span>
     </a>
     <a class="blk" href="09-production-tech/">
-      <span class="id">L7</span>System of Record
-      <span class="note">Your actual APIs, databases, SaaS platforms</span>
+      <span class="ttl">Your actual systems</span><span class="tech">L7 &middot; systems of record</span>
+      <span class="note">Billing, shipping, the customer database. Unchanged &mdash; the AI wraps these, it doesn't replace them.</span>
     </a>
   </div>
 
-  <div class="flow">&#9662;&nbsp; emits</div>
+  <div class="flow">&#9660;&nbsp; and afterwards, writes down what happened</div>
 
   <div class="tier">
-    <span class="tier-label">Run record</span>
+    <span class="tier-label">The record of what happened</span>
+    <span class="tier-sub">Kept for every single run.</span>
     <a class="blk" href="14-runtime-controls/#the-run-record">
-      <span class="id">REC</span>Audit pack <em>and</em> training signal — the same rows
-      <span class="note">Assembled context + hash · retrieved IDs · policy decisions · prompt version · tokens · cost · groundedness</span>
+      <span class="ttl">What it saw, chose, cost &mdash; and whether it was right</span><span class="tech">run record</span>
+      <span class="note">The same rows answer an auditor's question and tell you how to improve the system. Most teams fund those as two separate projects.</span>
     </a>
   </div>
 
   <div class="rail">
-    <a href="04-evals-observability/">Evals &amp; Observability</a>
+    <a href="04-evals-observability/">Checking the answer</a>
     <a href="13-agent-security/">Security</a>
-    <a href="11-cost-per-outcome-instrument/">Cost per Verified Outcome</a>
-    <a href="10-enterprise-governance/">Identity &amp; Governance</a>
-    <a href="15-build-order/">Build Order</a>
+    <a href="11-cost-per-outcome-instrument/">What it costs</a>
+    <a href="10-enterprise-governance/">Permissions &amp; audit</a>
+    <a href="15-build-order/">Where to start</a>
   </div>
 
-  <div class="hint">Click any block to jump to the chapter that covers it. Cross-cutting concerns above touch every layer.</div>
+  <div class="hint">Click any block to jump to the chapter that covers it. The five above apply at every level, not just one.</div>
 
 </div>
 
-Don't try to absorb this yet. It's here so you have somewhere to return to. Each chapter fills in one part, and by the end the shape should feel obvious rather than imposed.
+Two things in that picture are arguments rather than conventions, and they're worth noticing early.
 
-Two things about it are worth noticing now, because they are arguments rather than conventions:
+**The checks sit in the road, not next to it.** Most diagrams draw security and governance as a box off to the side. That's the box teams postpone, because the system runs fine without it. Drawing it as a gate every request must pass through changes the claim from *we have controls* to *there's no way around them*.
 
-**Governance sits inside the path, not beside it.** Most architecture diagrams draw controls as a layer floating alongside everything else. That is precisely the layer teams defer, because nothing structurally requires it. Drawing it as the single route every request must pass through changes the claim from *we have controls* to *there is no way around them*.
-
-**Two clocks, not one.** A business process — a customer's complaint, a refund case — lives for days or weeks. An agent run lives for seconds. Collapsing them turns "what's still outstanding?" into something you remember rather than something you can query.
+**There are two clocks.** A customer's complaint lives for a week; a single attempt to answer it lives for four seconds. Keeping those separate is what lets you ask "which tickets are still stuck?" as a question, rather than tracking it in someone's head.
 
 ## How to read this
 
