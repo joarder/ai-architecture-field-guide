@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workload Architecture Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A1A2E;
+    --bg-deep:#061220;
+    --panel:#0F2540;
+    --panel-2:#122b4a;
+    --line: rgba(191,227,240,0.14);
+    --line-strong: rgba(191,227,240,0.28);
+    --ink:#F2A93B;
+    --ink-dim: rgba(242,169,59,0.35);
+    --cyan:#BFE3F0;
+    --cyan-dim: rgba(191,227,240,0.55);
+    --text:#EAF2F8;
+    --muted:#7C93A8;
+    --good:#8FD6A6;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;}
+  body{
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-color: var(--bg);
+    min-height:100vh;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 80px;}
+  header{border-bottom:1px solid var(--line-strong);padding-bottom:20px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;}
+  .title-block h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;letter-spacing:-0.01em;margin:0 0 4px;color:var(--text);
+  }
+  .title-block .sub{color:var(--muted);font-size:13px;font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+  .rev{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cyan-dim);border:1px solid var(--line-strong);padding:4px 10px;border-radius:2px;white-space:nowrap;}
+
+  .grid{display:grid;grid-template-columns: 340px 1fr;gap:24px;}
+  @media (max-width: 860px){ .grid{grid-template-columns:1fr;} }
+
+  .panel{
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    padding:20px;
+    position:relative;
+  }
+  .panel::before, .panel::after, .corner-tl, .corner-br{
+    content:"";position:absolute;width:10px;height:10px;border-color:var(--cyan-dim);
+  }
+  .panel::before{top:-1px;left:-1px;border-top:2px solid var(--ink);border-left:2px solid var(--ink);}
+  .panel::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--ink);border-right:2px solid var(--ink);}
+
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--cyan);
+    text-transform:uppercase;margin-bottom:8px;
+  }
+  select{
+    width:100%;background:var(--bg-deep);color:var(--text);border:1px solid var(--line-strong);
+    padding:10px 12px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;border-radius:2px;
+    appearance:none;cursor:pointer;
+  }
+  select:focus{outline:2px solid var(--ink);outline-offset:1px;}
+
+  button.run{
+    width:100%;background:var(--ink);color:#1a1200;border:none;padding:13px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;letter-spacing:0.02em;
+    border-radius:2px;cursor:pointer;margin-top:6px;transition:filter .15s;
+  }
+  button.run:hover{filter:brightness(1.1);}
+  button.run:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+
+  .stack{display:flex;flex-direction:column;gap:4px;}
+  .layer{
+    display:grid;grid-template-columns:40px 1fr;align-items:center;gap:12px;
+    border:1px solid var(--line);border-radius:2px;padding:10px 14px;
+    background: rgba(10,26,46,0.4);
+    transition: background .3s, border-color .3s;
+  }
+  .layer .tag{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+  .layer .name{font-size:13px;color:var(--muted);}
+  .layer .note{font-family:'IBM Plex Mono',monospace;font-size:11px;color:transparent;margin-top:2px;transition:color .3s;}
+  .layer.active{
+    background: linear-gradient(90deg, rgba(242,169,59,0.14), rgba(242,169,59,0.04));
+    border-color: var(--ink);
+  }
+  .layer.active .tag{color:var(--ink);}
+  .layer.active .name{color:var(--text);}
+  .layer.active .note{color:var(--cyan);}
+  .layer.dim{opacity:0.35;}
+
+  .output h3{
+    font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--ink);margin:26px 0 10px;border-top:1px dashed var(--line-strong);padding-top:16px;
+  }
+  .output h3:first-child{border-top:none;padding-top:0;margin-top:0;}
+  .rec{
+    font-size:14px;line-height:1.55;color:var(--text);margin:0 0 8px;
+  }
+  .rec b{color:var(--cyan);font-weight:600;}
+  .flag{
+    display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    background:rgba(242,169,59,0.12);border:1px solid var(--ink-dim);color:var(--ink);
+    padding:3px 9px;border-radius:2px;margin:2px 4px 2px 0;
+  }
+  .flag.gov{background:rgba(191,227,240,0.1);border-color:var(--line-strong);color:var(--cyan);}
+  .placeholder{color:var(--muted);font-size:13px;font-style:italic;}
+  footer{margin-top:40px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title-block">
+      <h1>Workload Architecture Analyzer</h1>
+      <div class="sub">SCHEMATIC REV 1.0 — AI Architecture Field Guide</div>
+    </div>
+    <div class="rev">L0–L7 REFERENCE STACK</div>
+  </header>
+
+  <div class="grid">
+    <!-- INPUT PANEL -->
+    <div class="panel">
+      <div class="field">
+        <label>Data sensitivity</label>
+        <select id="sensitivity">
+          <option value="public">Public / marketing</option>
+          <option value="internal">Internal business data</option>
+          <option value="confidential">Confidential / customer PII</option>
+          <option value="regulated" selected>Regulated (health, finance, gov OFFICIAL)</option>
+          <option value="classified">Government PROTECTED+ / classified</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Task shape</label>
+        <select id="task">
+          <option value="single-tool">Single agent, tool use</option>
+          <option value="multi-agent" selected>Multi-agent orchestration</option>
+          <option value="rag-heavy">Heavy knowledge retrieval (RAG)</option>
+          <option value="stable-behavior">Stable, narrow, repeated behaviour</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Monthly volume</label>
+        <select id="volume">
+          <option value="low">Low — under 1M tokens/mo</option>
+          <option value="medium" selected>Medium — 1–50M tokens/mo</option>
+          <option value="high">High — 50M+ tokens/mo</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Latency requirement</label>
+        <select id="latency">
+          <option value="batch">Relaxed / batch or async</option>
+          <option value="interactive" selected>Interactive (seconds)</option>
+          <option value="realtime">Real-time / sub-second</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hosting jurisdiction</label>
+        <select id="jurisdiction">
+          <option value="none">No specific constraint</option>
+          <option value="regulated" selected>Regulated industry — residency required</option>
+          <option value="gov">Government / critical infrastructure</option>
+        </select>
+      </div>
+      <button class="run" onclick="analyze()">Generate analysis →</button>
+    </div>
+
+    <!-- STACK + OUTPUT -->
+    <div>
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="stack" id="stack"></div>
+      </div>
+      <div class="panel output" id="output">
+        <p class="placeholder">Set the workload parameters and generate an analysis — the stack above will highlight the layers your architecture decisions actually touch.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>THE AI ARCHITECTURE FIELD GUIDE — A first-pass hypothesis to pressure-test, not a substitute for judgment.</footer>
+</div>
+
+<script>
+const LAYERS = [
+  {tag:'L0', name:'Interaction', key:'l0'},
+  {tag:'L1', name:'Host / Runtime', key:'l1'},
+  {tag:'L2', name:'Reasoning', key:'l2'},
+  {tag:'L3', name:'Model', key:'l3'},
+  {tag:'L4', name:'Orchestration (optional)', key:'l4'},
+  {tag:'L5', name:'Tool Protocol — MCP / A2A', key:'l5'},
+  {tag:'L6', name:'Capability Servers', key:'l6'},
+  {tag:'L7', name:'System of Record', key:'l7'},
+  {tag:'GOV', name:'Governance Plane', key:'gov'},
+];
+
+function renderStack(active){
+  const el = document.getElementById('stack');
+  el.innerHTML = LAYERS.map(l => {
+    const isActive = active[l.key] !== undefined;
+    const note = isActive ? active[l.key] : '';
+    return `<div class="layer ${isActive ? 'active' : 'dim'}">
+      <div class="tag">${l.tag}</div>
+      <div>
+        <div class="name">${l.name}</div>
+        <div class="note">${note}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+renderStack({});
+
+function analyze(){
+  const sensitivity = document.getElementById('sensitivity').value;
+  const task = document.getElementById('task').value;
+  const volume = document.getElementById('volume').value;
+  const latency = document.getElementById('latency').value;
+  const jurisdiction = document.getElementById('jurisdiction').value;
+
+  const active = {};
+  const out = [];
+  const flags = [];
+
+  // L0/L1 always active
+  active.l0 = 'entry point';
+  active.l1 = 'session + context budget';
+
+  // L2/L3 always active
+  active.l2 = task === 'stable-behavior' ? 'narrow, low-variance planning' : 'planning & decomposition';
+  active.l3 = 'model-selection lever below';
+
+  // L4 orchestration
+  let orchestration;
+  if (task === 'multi-agent') {
+    active.l4 = 'hub-and-spoke, A2A';
+    orchestration = `<b>Add L4 orchestration.</b> Task shape justifies a hub-and-spoke pattern — an orchestrator decomposing to specialist workers. Coordinate workers over <b>A2A</b>, not MCP. Budget for agent-identity and cost-per-agent tracking from day one — this is where the ~72% of multi-agent deployments that don't reach sustained production usually fail.`;
+  } else {
+    orchestration = `<b>Skip L4 for now.</b> A single agent doing L1→L2→L3→L5→L6→L7 directly covers this task shape. Adding orchestration before it's structurally needed is a common failure mode, not a safety margin.`;
+  }
+
+  // L5/L6/L7 always active
+  active.l5 = task === 'multi-agent' ? 'MCP + A2A' : 'MCP';
+  active.l6 = 'per-domain servers';
+  active.l7 = 'existing APIs / data';
+
+  // Model-selection lever
+  let modelLever;
+  if (task === 'stable-behavior' && volume === 'high') {
+    modelLever = `<b>Distillation candidate.</b> Stable, narrow, high-volume (50M+ tokens/mo) is exactly the envelope distillation pays back in — typically 3–7 months. Keep an eval harness running before committing to the project; it's the only way to know the checkpoint actually improved verified-outcome rate.`;
+  } else if (task === 'stable-behavior') {
+    modelLever = `<b>Fine-tuning candidate, once volume justifies it.</b> Behaviour is stable and narrow — good LoRA/QLoRA territory for tone/format consistency. At current volume, confirm the eval-harness + lifecycle cost still pays back before committing.`;
+  } else if (task === 'rag-heavy') {
+    modelLever = `<b>Stay on RAG, invest in retrieval quality.</b> The task's value comes from grounding in changing facts, not stable behaviour — fine-tuning is the wrong lever here. Prioritise just-in-time retrieval and context-rot mitigation over model changes.`;
+  } else {
+    modelLever = `<b>Prompting (+ RAG if needed) is likely sufficient.</b> Exhaust this layer — schema-constrained output, few-shot, ReAct scaffolding — before considering fine-tuning. Most teams reach for fine-tuning before this layer is exhausted.`;
+  }
+
+  // Hosting tier
+  let hosting;
+  if (jurisdiction === 'gov' || sensitivity === 'classified') {
+    hosting = `<b>Sovereign private cloud / disconnected.</b> Classification or critical-infrastructure status points to a fully customer-controlled boundary (e.g. on-premises Foundry Local pattern) — inference must stay inside the boundary, not just storage. Confirm IRAP status covers your <i>specific tenant configuration</i>, not just the platform.`;
+    flags.push({label:'IRAP / PSPF / ISM review required', gov:true});
+    flags.push({label:'Data residency ≠ inference residency — verify both', gov:true});
+  } else if (jurisdiction === 'regulated' || sensitivity === 'confidential' || sensitivity === 'regulated') {
+    hosting = `<b>Sovereign public cloud.</b> Standard regional deployment with documented residency (not just storage — check inference routing too) is likely sufficient. Confirm IRAP/compliance status if any government-adjacent data is in scope.`;
+    flags.push({label:'Verify inference-region documentation, not just storage', gov:true});
+  } else {
+    hosting = `<b>Standard cloud deployment.</b> No sovereignty constraint identified — optimise for cost and latency rather than residency.`;
+  }
+
+  // Cost-per-outcome levers, prioritised by volume/latency
+  const levers = [];
+  if (volume === 'high') levers.push('Model cascade/routing — biggest lever at this volume');
+  if (latency !== 'batch') levers.push('Prompt/semantic caching — cuts latency and cost together');
+  if (task === 'multi-agent') levers.push('Bounded reflection loops — cap self-critique cycles');
+  levers.push('Just-in-time retrieval / lazy tool loading — default hygiene regardless of profile');
+  if (task === 'multi-agent') levers.push('Sub-agent context isolation');
+
+  // Eval tier
+  let evalTier;
+  if (sensitivity === 'classified' || sensitivity === 'regulated') {
+    evalTier = `<b>Full tiered evals required.</b> Deterministic checks on 100% of traffic, lightweight judge sampling, and full LLM-as-judge on a 5–10% sample for anything touching regulated decisions — plus human-reviewed calibration of the judge itself.`;
+  } else {
+    evalTier = `<b>Deterministic + lightweight judge is likely sufficient.</b> Reserve full LLM-as-judge for the highest-risk output paths only.`;
+  }
+  active.gov = 'evals · identity · audit';
+
+  if (task === 'multi-agent') flags.push({label:'Agent identity / NHI strategy needed', gov:false});
+  if (sensitivity === 'classified') flags.push({label:'AU: ITSA engagement before deployment', gov:true});
+  if (jurisdiction !== 'none') flags.push({label:'AP 1.7–1.9 disclosure applies from 10 Dec 2026', gov:true});
+
+  renderStack(active);
+
+  document.getElementById('output').innerHTML = `
+    <h3>Orchestration</h3>
+    <p class="rec">${orchestration}</p>
+    <h3>Model-selection lever</h3>
+    <p class="rec">${modelLever}</p>
+    <h3>Hosting tier</h3>
+    <p class="rec">${hosting}</p>
+    <h3>Cost-per-outcome levers to prioritise</h3>
+    <p class="rec">${levers.map(l => '• ' + l).join('<br>')}</p>
+    <h3>Evaluation tier</h3>
+    <p class="rec">${evalTier}</p>
+    <h3>Flags</h3>
+    <div>${flags.map(f => `<span class="flag ${f.gov ? 'gov' : ''}">${f.label}</span>`).join('')}</div>
+  `;
+}
+</script>
+</body>
+</html>

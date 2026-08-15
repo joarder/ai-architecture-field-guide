@@ -1,0 +1,149 @@
+/* Interactive architecture stack diagram — landing page.
+   Uses Material's own CSS variables so light/dark mode works automatically.
+   Each block leads with a plain-English job, with the technical name secondary. */
+
+.stack-map {
+  margin: 1.5rem 0 2rem;
+  line-height: 1.4;
+}
+
+.stack-map .tier {
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 5px;
+  padding: .7rem;
+  margin-bottom: .4rem;
+  background: var(--md-code-bg-color);
+}
+
+.stack-map .tier-label {
+  display: block;
+  font-weight: 700;
+  font-size: .72rem;
+  color: var(--md-default-fg-color);
+  margin-bottom: .1rem;
+}
+
+.stack-map .tier-sub {
+  display: block;
+  font-size: .66rem;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: .55rem;
+}
+
+/* A clickable block */
+.stack-map a.blk {
+  display: block;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-left: 3px solid var(--md-primary-fg-color);
+  border-radius: 4px;
+  padding: .5rem .6rem;
+  margin-bottom: .35rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  transition: border-color .15s, transform .15s, background .15s;
+}
+
+.stack-map a.blk:hover,
+.stack-map a.blk:focus-visible {
+  border-left-color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  transform: translateX(2px);
+  outline: none;
+}
+
+.stack-map a.blk .ttl {
+  font-weight: 600;
+  font-size: .76rem;
+  display: inline;
+}
+
+.stack-map a.blk .tech {
+  font-size: .64rem;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font-family, monospace);
+  margin-left: .45rem;
+  white-space: nowrap;
+}
+
+.stack-map a.blk .note {
+  display: block;
+  font-size: .7rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: .18rem;
+}
+
+.stack-map a.blk:hover .tech { color: var(--md-accent-fg-color); }
+
+/* The chokepoint — visually enclosing, since that IS the architectural claim */
+.stack-map .chokepoint {
+  border: 2px dashed var(--md-accent-fg-color);
+  border-radius: 5px;
+  padding: .6rem;
+  margin: .4rem 0;
+  background: color-mix(in srgb, var(--md-accent-fg-color) 6%, transparent);
+}
+
+.stack-map .chokepoint-hd {
+  display: block;
+  font-weight: 700;
+  font-size: .74rem;
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+  margin-bottom: .15rem;
+}
+
+.stack-map .chokepoint-hd:hover { text-decoration: underline; }
+
+.stack-map .chokepoint-seq {
+  font-size: .68rem;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: .5rem;
+}
+
+.stack-map .flow {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  font-size: .68rem;
+  margin: .25rem 0;
+}
+
+/* Cross-cutting rail */
+.stack-map .rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: .6rem;
+}
+
+.stack-map .rail a {
+  flex: 1 1 auto;
+  text-align: center;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 4px;
+  padding: .4rem .5rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  font-size: .7rem;
+  transition: border-color .15s, background .15s;
+}
+
+.stack-map .rail a:hover,
+.stack-map .rail a:focus-visible {
+  border-color: var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  outline: none;
+}
+
+.stack-map .hint {
+  font-size: .68rem;
+  color: var(--md-default-fg-color--light);
+  margin-top: .6rem;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .stack-map .rail a { flex: 1 1 100%; }
+  .stack-map a.blk .tech { display: block; margin-left: 0; }
+}

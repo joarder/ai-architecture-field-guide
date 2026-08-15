@@ -1,0 +1,1798 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A practitioner's reference for architecting, governing, and costing agentic AI systems — from protocol to production.">
+      
+      
+        <meta name="author" content="Joarder Kamal, PhD">
+      
+      
+      
+      
+        <link rel="next" href="01-mcp/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>The AI Architecture Field Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/stack-map.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-ai-architecture-field-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="The AI Architecture Field Guide" class="md-header__button md-logo" aria-label="The AI Architecture Field Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            The AI Architecture Field Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/joarder/ai-architecture-field-guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai-architecture-field-guide
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="01-mcp/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Connectivity
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="02-orchestration/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Cognition
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="04-evals-observability/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Quality & Economics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="12-agent-reliability/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reliability & Security
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="14-runtime-controls/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Governance
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="15-build-order/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Putting It Together
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="references/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  References
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="The AI Architecture Field Guide" class="md-nav__button md-logo" aria-label="The AI Architecture Field Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    The AI Architecture Field Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/joarder/ai-architecture-field-guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ai-architecture-field-guide
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-with-a-familiar-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start with a familiar failure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-facts-everything-follows-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three facts everything follows from
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-unit-of-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The unit of account
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-this-is-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who this is for
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-scope-and-on-judgment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A note on scope, and on judgment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-example-well-build-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The example we'll build on
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-read-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to read this
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connectivity
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Connectivity
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="01-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connecting a Model to Your Systems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="07-protocols/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond MCP (A2A & the protocol landscape)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cognition
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cognition
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="02-orchestration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Orchestration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="03-context-memory-rag/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context, Memory & RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quality & Economics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Quality & Economics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="04-evals-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evals & Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="05-model-economics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompt vs RAG vs Fine-tune vs Distill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="06-inference-economics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inference Economics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reliability & Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reliability & Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="12-agent-reliability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Reliability & Failure Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="13-agent-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Governance
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Governance
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="14-runtime-controls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime Control Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="08-au-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Australian AI Governance & Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="09-production-tech/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production Technology & Blockers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="10-enterprise-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enterprise & Principal-Architect Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="tool/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Putting It Together
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Putting It Together
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="15-build-order/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Order — What to Do First
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="11-cost-per-outcome-instrument/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost-per-Verified-Outcome
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#start-with-a-familiar-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Start with a familiar failure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-facts-everything-follows-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three facts everything follows from
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-unit-of-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The unit of account
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-this-is-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who this is for
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-scope-and-on-judgment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A note on scope, and on judgment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-example-well-build-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The example we'll build on
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-read-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to read this
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="the-ai-architecture-field-guide">The AI Architecture Field Guide<a class="headerlink" href="#the-ai-architecture-field-guide" title="Permanent link">&para;</a></h1>
+<p><em>Designing, governing, and costing agentic AI systems — from first principles.</em></p>
+<hr />
+<h2 id="start-with-a-familiar-failure">Start with a familiar failure<a class="headerlink" href="#start-with-a-familiar-failure" title="Permanent link">&para;</a></h2>
+<p>A team builds an AI assistant. It demos beautifully. Everyone in the room agrees it should go into production.</p>
+<p>Six months later it is still not in production, and nobody can quite explain why. The demo still works. But somewhere between "it works" and "we can run this," a set of questions appeared that nobody had answers for. What does it cost per use — not per million tokens, but per actual customer question answered correctly? How do we know it answered correctly? What happens when it doesn't? Who decided software is allowed to touch a customer's account, and where is that written down? When it does something wrong at 2am, can we reconstruct what it saw and why it chose that?</p>
+<p>This is the normal outcome, not the unlucky one. Industry surveys through 2026 consistently find that the large majority of agent pilots never reach production, and Gartner projects that a substantial share of agentic projects will be cancelled outright by 2027. The failures are rarely about model capability. The models are good. The failures are architectural: the system was built to demonstrate a capability, not to be operated.</p>
+<p>This guide is about the difference.</p>
+<h2 id="the-three-facts-everything-follows-from">The three facts everything follows from<a class="headerlink" href="#the-three-facts-everything-follows-from" title="Permanent link">&para;</a></h2>
+<p>There is one idea underneath every chapter here, and it is worth stating plainly before anything else.</p>
+<p><strong>Almost everything in agentic AI architecture is a compensation for three properties of language models.</strong></p>
+<p>Not a feature. A compensation — engineering added to work around something the model fundamentally cannot do.</p>
+<p><strong>One: the model is stateless.</strong> Every call starts from nothing. The model has no memory of the previous message, the previous session, or the customer's history. It knows only what you put in front of it, this instant. Everything you want it to "know" must be assembled and sent, every single time.</p>
+<p><em>Consequence:</em> you need a discipline for deciding <strong>what</strong> to assemble. That discipline is context engineering, and memory and retrieval are its machinery.</p>
+<p><strong>Two: the model is non-deterministic.</strong> The same input can produce different outputs. There is no test that proves it works, only evidence that it usually does. You cannot know an output is correct by inspecting the code that produced it.</p>
+<p><em>Consequence:</em> you need a separate mechanism to check the output — evaluation. And because you cannot predict behaviour, you must instead constrain and record it, which is where governance, permissions, and audit trails come from.</p>
+<p><strong>Three: the model is metered.</strong> Every call costs money in proportion to how much text goes in and comes out. Work that would be free in ordinary software has a running meter attached.</p>
+<p><em>Consequence:</em> architecture becomes an economic decision. How much context you load, how many times an agent retries, whether a cheaper model could have handled it — these are cost decisions wearing technical clothing.</p>
+<p>Everything else in this guide falls out of those three. Protocols like MCP exist because connecting a stateless model to many systems is combinatorially expensive. Multi-agent orchestration exists because context is finite. Run records exist because non-determinism means you cannot reason backwards from code to behaviour.</p>
+<p>When something in the field seems arbitrary or faddish, this is the test worth applying: <em>which of the three is this compensating for?</em> If the answer is none, it is probably fashion.</p>
+<h2 id="the-unit-of-account">The unit of account<a class="headerlink" href="#the-unit-of-account" title="Permanent link">&para;</a></h2>
+<p>One more idea, which follows from facts two and three together.</p>
+<p>If the model is non-deterministic <strong>and</strong> metered, then counting tokens tells you nothing about whether you got value. A thousand tokens spent producing a wrong answer costs exactly what a thousand spent on a right one costs. Spend and value come apart.</p>
+<p>So the unit of account in this guide is not the token. It is the <strong>verified outcome</strong> — a result that something checked before you counted it. That single shift reorganises everything downstream: it makes evaluation a prerequisite rather than a nice-to-have, turns model selection into a break-even calculation, and gives you a number you can put in front of a CFO without flinching.</p>
+<p>You will see this thread reappear in every chapter. It is the spine.</p>
+<h2 id="who-this-is-for">Who this is for<a class="headerlink" href="#who-this-is-for" title="Permanent link">&para;</a></h2>
+<p>This guide is written for people who have to make a decision and defend it:</p>
+<ul>
+<li><strong>Architects and technical leads</strong> designing an agentic system and choosing where the boundaries go</li>
+<li><strong>Forward-deployed and delivery engineers</strong> who have to land something real against a date, inside someone else's constraints</li>
+<li><strong>Engineering and product managers</strong> deciding whether to build, what it will cost, and what could go wrong</li>
+</ul>
+<p>You do not need to have built an agent before. You do need to be comfortable with the idea of an API and a database. Where code appears, it is there to make an idea concrete — you can follow every argument without reading it.</p>
+<p>The balance is roughly <strong>70% architecture, cost and governance; 30% implementation</strong>. This is a book about decisions, with enough code to keep the decisions honest.</p>
+<h2 id="a-note-on-scope-and-on-judgment">A note on scope, and on judgment<a class="headerlink" href="#a-note-on-scope-and-on-judgment" title="Permanent link">&para;</a></h2>
+<p>Agentic architecture is not the right answer to most problems. A great deal of what is currently built as an agent would work better, cheaper, and more reliably as a script with one model call in the middle of it.</p>
+<p>The aim here is not to sell you agents. It is to give you the judgment to know when the complexity is earned — and, just as often, when it isn't. Several chapters spend as much time on what to <strong>defer</strong> as on what to build. That is deliberate.</p>
+<h2 id="the-example-well-build-on">The example we'll build on<a class="headerlink" href="#the-example-well-build-on" title="Permanent link">&para;</a></h2>
+<p>Rather than switching examples each chapter, one scenario runs the whole way through.</p>
+<p><strong>A mid-sized company wants to help its customer support team.</strong> Tickets arrive by email. Some are simple questions whose answers are already written down somewhere — refund windows, how to upgrade a plan. Others need a look at the customer's actual account: why was I charged, what's my balance, is my subscription active. A few are genuinely thorny and a human should handle them.</p>
+<p>It is a deliberately ordinary problem. No glamour, no research challenge. But it contains, in miniature, nearly every decision in this guide: what the system needs to know, how it reaches your billing platform, when to hand off, how you check the answer was right, what it costs per resolved ticket, and who is allowed to let software touch a customer's account.</p>
+<p>Each chapter develops this scenario a little further. By the end it is a complete system — and there is a <strong>runnable implementation</strong> in this repository under <code>boilerplate/</code> that you can execute in one command, with no API keys, to watch the whole thing work.</p>
+<div class="admonition note">
+<p class="admonition-title">About the numbers in this scenario</p>
+<p>Where the support example carries figures — ticket volumes, costs — they are illustrative, chosen to make the arithmetic visible. They are not measurements of a real deployment. Figures drawn from published research are cited in <a href="references/">References</a>; anything I could not verify at source has been left out.</p>
+</div>
+<h2 id="the-map">The map<a class="headerlink" href="#the-map" title="Permanent link">&para;</a></h2>
+<p>Here is the whole system, in the order a support ticket travels through it. You don't need to understand it yet — it's here so you have somewhere to come back to. Each chapter fills in one piece.</p>
+<div class="stack-map" markdown="0">
+
+  <div class="tier">
+    <span class="tier-label">The long game &mdash; a ticket stays open for days or weeks</span>
+    <span class="tier-sub">Tracks the customer's whole issue from arrival to resolution.</span>
+    <a class="blk" href="02-orchestration/#the-architecture-and-two-arguments-inside-it">
+      <span class="ttl">What still needs doing</span><span class="tech">process tier</span>
+      <span class="note">A list of steps and a log of what's happened. Because it's stored rather than held in memory, you can <em>ask</em> what's outstanding instead of hoping someone tracked it.</span>
+    </a>
+  </div>
+
+  <div class="flow">&#9660;&nbsp; sends one step to be worked on</div>
+
+  <div class="tier">
+    <span class="tier-label">A single attempt &mdash; a few seconds</span>
+    <span class="tier-sub">One step of the ticket, start to finish.</span>
+
+    <a class="blk" href="02-orchestration/">
+      <span class="ttl">Where the request arrives</span><span class="tech">L0 &middot; interaction</span>
+      <span class="note">An email, a chat message, a form. However the ticket reaches you.</span>
+    </a>
+    <a class="blk" href="03-context-memory-rag/">
+      <span class="ttl">Keeping track of the conversation</span><span class="tech">L1 &middot; host / runtime</span>
+      <span class="note">Holds what's been said so far &mdash; and decides how much of it still fits in the model's limited attention.</span>
+    </a>
+
+    <div class="chokepoint">
+      <a class="chokepoint-hd" href="14-runtime-controls/">&#9670; One way in &mdash; no shortcuts</a>
+      <div class="chokepoint-seq">Who's asking? &rarr; Are they allowed? &rarr; What's the budget? &rarr; What should the model see? &rarr; Was the answer valid? &rarr; Write it all down.</div>
+
+      <a class="blk" href="02-orchestration/">
+        <span class="ttl">Working out what to do</span><span class="tech">L2 &middot; reasoning</span>
+        <span class="note">Is this a policy question or an account question? What's the next step?</span>
+      </a>
+      <a class="blk" href="05-model-economics/">
+        <span class="ttl">The part that actually thinks</span><span class="tech">L3 &middot; the model</span>
+        <span class="note">Text goes in, text comes out. Swappable &mdash; nothing above or below needs to know which model this is.</span>
+      </a>
+      <a class="blk" href="12-agent-reliability/">
+        <span class="ttl">Splitting work between specialists <em>(only if needed)</em></span><span class="tech">L4 &middot; orchestration</span>
+        <span class="note">A billing specialist, a shipping specialist. Most systems don't need this &mdash; and adding it too early causes more problems than it solves.</span>
+      </a>
+      <a class="blk" href="01-mcp/">
+        <span class="ttl">Asking to use one of your systems</span><span class="tech">L5 &middot; tool protocol (MCP)</span>
+        <span class="note">A standard way for the model to find out what it can do, and to request it by name.</span>
+      </a>
+    </div>
+
+    <a class="blk" href="01-mcp/">
+      <span class="ttl">Your systems, safely wrapped</span><span class="tech">L6 &middot; capability servers</span>
+      <span class="note">One wrapper per system. This is where credentials live and where "is this allowed?" gets enforced.</span>
+    </a>
+    <a class="blk" href="09-production-tech/">
+      <span class="ttl">Your actual systems</span><span class="tech">L7 &middot; systems of record</span>
+      <span class="note">Billing, shipping, the customer database. Unchanged &mdash; the AI wraps these, it doesn't replace them.</span>
+    </a>
+  </div>
+
+  <div class="flow">&#9660;&nbsp; and afterwards, writes down what happened</div>
+
+  <div class="tier">
+    <span class="tier-label">The record of what happened</span>
+    <span class="tier-sub">Kept for every single run.</span>
+    <a class="blk" href="14-runtime-controls/#the-run-record">
+      <span class="ttl">What it saw, chose, cost &mdash; and whether it was right</span><span class="tech">run record</span>
+      <span class="note">The same rows answer an auditor's question and tell you how to improve the system. Most teams fund those as two separate projects.</span>
+    </a>
+  </div>
+
+  <div class="rail">
+    <a href="04-evals-observability/">Checking the answer</a>
+    <a href="13-agent-security/">Security</a>
+    <a href="11-cost-per-outcome-instrument/">What it costs</a>
+    <a href="10-enterprise-governance/">Permissions &amp; audit</a>
+    <a href="15-build-order/">Where to start</a>
+  </div>
+
+  <div class="hint">Click any block to jump to the chapter that covers it. The five above apply at every level, not just one.</div>
+
+</div>
+
+<p>Two things in that picture are arguments rather than conventions, and they're worth noticing early.</p>
+<p><strong>The checks sit in the road, not next to it.</strong> Most diagrams draw security and governance as a box off to the side. That's the box teams postpone, because the system runs fine without it. Drawing it as a gate every request must pass through changes the claim from <em>we have controls</em> to <em>there's no way around them</em>.</p>
+<p><strong>There are two clocks.</strong> A customer's complaint lives for a week; a single attempt to answer it lives for four seconds. Keeping those separate is what lets you ask "which tickets are still stuck?" as a question, rather than tracking it in someone's head.</p>
+<h2 id="how-to-read-this">How to read this<a class="headerlink" href="#how-to-read-this" title="Permanent link">&para;</a></h2>
+<p>If you are new to the material, read straight through. The chapters escalate deliberately.</p>
+<p>If you already build these systems and want the sharp end: <a href="12-agent-reliability/">Agent Reliability</a> for how they fail, <a href="13-agent-security/">Agent Security</a> for how they're attacked, and <a href="11-cost-per-outcome-instrument/">Cost per Verified Outcome</a> for the economics.</p>
+<p>If you are about to start building and want the short version: <a href="15-build-order/">Build Order</a> says what to do first and — equally important — what to leave until later on purpose.</p>
+<p>If you want to reason about a specific workload right now, the <a href="tool/">Workload Analyzer</a> gives you a first-pass architecture to pressure-test against the rest of the guide.</p>
+<hr />
+<p><em>This is a living document. Chapters are added and revised as the field moves — that's the point of publishing it this way rather than as a static report.</em></p>
+<p><strong>Licence.</strong> The written content is released under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> — reuse it, including commercially, with attribution. The reference implementation and the analyzer tool are MIT. Where a framing here is distinctly another author's, it's credited in the chapter and in <a href="references/">References</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Joarder Kamal — content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
