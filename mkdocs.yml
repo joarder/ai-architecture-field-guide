@@ -51,20 +51,20 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - "Connectivity":
-    - MCP: 01-mcp.md
+  - "Layer 1 — Connectivity":
+    - Connecting a Model to Your Systems: 01-mcp.md
     - Beyond MCP (A2A & the protocol landscape): 07-protocols.md
-  - "Cognition":
+  - "Layer 2 — Cognition":
     - Agent Orchestration: 02-orchestration.md
     - Context, Memory & RAG: 03-context-memory-rag.md
-  - "Quality & Economics":
+  - "Layer 3 — Quality & Economics":
     - Evals & Observability: 04-evals-observability.md
     - Prompt vs RAG vs Fine-tune vs Distill: 05-model-economics.md
     - Inference Economics: 06-inference-economics.md
   - "Reliability & Security":
     - Agent Reliability & Failure Modes: 12-agent-reliability.md
     - Agent Security: 13-agent-security.md
-  - "Governance":
+  - "Layer 4 — Governance":
     - Runtime Control Patterns: 14-runtime-controls.md
     - Australian AI Governance & Security: 08-au-governance.md
     - Production Technology & Blockers: 09-production-tech.md
